@@ -1,0 +1,33 @@
+.row-fluid
+  .span12
+    h1.page-header {{date | date:short}}
+    
+.row-fluid
+  .span12
+    form.well.form-inline(style="text-align:center;", ng-submit="getRecipes()")
+      .input-append
+        input.input-xlarge.typeahead(type="text", placeholder="Start typing recipe...", ng-model="day.recipe")
+        button.btn Select recipe
+  
+  #recipeContainer(style="display:none;")
+    div(ng-show="recipes[0]")
+      p OK Recipe
+      div(ng-repeat="recipe in recipes")
+        p {{recipe.name}}
+    div(ng-hide="recipes[0]")
+      p NOK Recipe
+        
+script
+  $('.typeahead').typeahead({
+    source : function(typeahead, query){
+      if(!query)
+        return;
+      $.get('/recipes/' + query, function(data){
+        typeahead.process(data);
+      });
+    }
+    ,property: 'name'
+    ,onselect: function(obj){
+      this.$element.closest('form').submit();
+    }
+  });

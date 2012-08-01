@@ -1,0 +1,14 @@
+.row-fluid
+  .span12
+    h1.page-header Plans
+.row-fluid
+  .span1.prev-week
+    h1.clickable
+      a(title=t('locale.plans:prevweek')) <
+  .span10
+    ul#mealPlan
+      each plan, i in plans
+        != partial('partials/plan', {plan : plan})
+  .span1.next-week
+    h1.clickable
+      a(title=t('locale.plans:nextweek')) >

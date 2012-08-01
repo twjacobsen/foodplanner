@@ -1,0 +1,22 @@
+{ 
+  "misc" : {
+     "save": "gem"
+    ,"add": "tilføj"
+    ,"cancel" : "annuller"
+  }
+  ,"days" : {
+     "0" : "mandag"
+    ,"1" : "tirsdag"
+    ,"2" : "onsdag"
+    ,"3" : "torsdag"
+    ,"4" : "fredag"
+    ,"5" : "lørdag"
+    ,"6" : "søndag"
+  }
+  ,"users" : {
+     "signup" : "Opret bruger"
+    ,"signin" : "Log ind"
+    ,"signout" : "Log ud"
+    ,"welcome" : "Velkommen"
+  }
+}

@@ -1,0 +1,10 @@
+li(date="#{plan.date}", day="#{plan.day}", dbid="#{plan._id}")
+  div
+    h2.day= t('days.' + plan.day).capitalize();
+    - if (plan.meal)
+      div.update-meal.clickable
+        h3.meal #{plan.meal}
+          span.help-inline
+            a.icon-pencil
+    - else
+      a.btn.meal.update-meal= t('locale.plans:addmeal').capitalize()

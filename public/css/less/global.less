@@ -1,0 +1,54 @@
+@linkColor: #00B7FF;
+@bodyColor: #2E2E2E;
+
+.rounded-corners(@radius: 5px){
+  border-radius:          @radius;
+  -webkit-border-radius:  @radius;
+  -moz-border-radius:     @radius;
+}
+
+.solid-border(@color, @width: 1px) when (iscolor(@color)) {
+  border: @width solid @color;
+}
+
+.box-shadow(@style, @c) when (iscolor(@c)) {
+  box-shadow:         @style @c;
+  -webkit-box-shadow: @style @c;
+  -moz-box-shadow:    @style @c;
+}
+.box-shadow(@style, @alpha: 50%) when (isnumber(@alpha)) {
+  .box-shadow(@style, rgba(0, 0, 0, @alpha));
+}
+
+.text-shadow(@x, @y, @blur, @color) when (isnumber(@blur)) {
+	text-shadow: @x @y @blur @color
+}
+
+.text-shadow(@x, @y, @color) when (iscolor(@color)) {
+	.text-shadow(@x, @y, 0, @color);
+}
+
+.text-shadow(@x, @y, @blur) when (isnumber(@blur)){
+  .text-shadow(@x, @y, @blur, black);
+}
+
+.text-shadow(@x, @y) {
+	.text-shadow(@x, @y, 0, black);
+}
+
+body {
+  position:relative;
+  padding-top: 90px;
+}
+
+h1, h2, h3 {
+  font-family: 'Cabin', sans-serif;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+@import "plans";
+@import "recipes";
+@import "shoppinglist";

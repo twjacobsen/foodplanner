@@ -1,0 +1,24 @@
+.row-fluid
+  .span12
+    h1 Week-plan
+    h3.page-header From {{week[0].date | date:short}} to {{week[6].date | date:short}}
+    
+.row-fluid
+  .span1.prev-week
+    h1.clickable
+      a(ng-href="#/week/{{prevWeekOffset}}") <
+  .span10
+    ul#mealPlan
+      li(ng-repeat="day in week", date="{{day.date}}")
+        div
+          h2.day {{day.localDay}}
+          div(ng-switch on="day.recipe")
+            a.btn.meal.update-meal(ng-switch-when="", ng-href="#/day/{{day.date}}") Add recipe
+            div.update-meal.clickable(ng-switch-default, ng-href="#/day/{{day.date}}")
+              h3.meal {{day.recipe}}
+                span.help-inline
+                  a.icon-pencil
+
+  .span1.next-week
+    h1.clickable
+      a(ng-href="#/week/{{nextWeekOffset}}") >

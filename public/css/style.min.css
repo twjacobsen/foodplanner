@@ -1,0 +1,7 @@
+body{position:relative;padding-top:90px;}
+h1,h2,h3{font-family:'Cabin',sans-serif;}
+.clickable{cursor:pointer;}
+#mealPlan{margin-left:0px;}#mealPlan li{display:inline;list-style:none;text-align:center;}#mealPlan li div{display:inline-block;width:50%;}
+#mealPlan li div .day{text-decoration:underline;}
+#mealPlan li:last-child div{width:100%;}
+.next-week{text-align:right;}
