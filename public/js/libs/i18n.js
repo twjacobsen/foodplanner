@@ -1,2 +1,628 @@
+(function() {
 
-(function(){function f(e,u){typeof e=="function"&&(u=e,e={}),e=e||{},i.extend(r,e),typeof r.ns=="string"&&(r.ns={namespaces:[r.ns],defaultNs:r.ns}),r.lng||(r.lng=i.detectLanguage()),r.lng?i.cookie.create("i18next",r.lng,r.cookieExpirationTime):(r.lng=r.fallbackLng,i.cookie.remove("i18next")),a=[];if(r.lng.indexOf("-")===2&&r.lng.length===5){var f=r.lng.split("-");r.lng=r.lowerCaseLng?f[0].toLowerCase()+"-"+f[1].toLowerCase():f[0].toLowerCase()+"-"+f[1].toUpperCase(),a.push(r.lng),a.push(r.lng.substr(0,2))}else a.push(r.lng);a.indexOf(r.fallbackLng)===-1&&a.push(r.fallbackLng),o=r.lng,i.log("currentLng set to: "+o),t&&r.setJqueryExt&&c();var l;return t&&t.Deferred&&(l=t.Deferred()),r.resStore?(s=r.resStore,u&&u(m),l&&l.resolve(),l):(n.sync.load(a,r,function(e,t){s=t,u&&u(m),l&&l.resolve()}),l)}function l(e,t){f({lng:e},t)}function c(){function e(e,n,r){if(n.length===0)return;var i="text";if(n.indexOf("[")===0){var s=n.split("]");n=s[1],i=s[0].substr(1,s[0].length-1)}n.indexOf(";")===n.length-1&&(n=n.substr(0,n.length-2));var o;i==="html"?(o=t.extend({defaultValue:e.html()},r),e.html(t.t(n,o))):i==="text"?(o=t.extend({defaultValue:e.text()},r),e.text(t.t(n,o))):(o=t.extend({defaultValue:e.attr(i)},r),e.attr(i,t.t(n,o)))}function n(n,i){var s=n.attr("data-i18n");if(!s)return;!i&&r.useDataAttrOptions===!0&&(i=n.data("i18n-options")),i=i||{};if(s.indexOf(";")<=s.length-1){var o=s.split(";");t.each(o,function(t,r){e(n,r,i)})}else e(n,k,i);r.useDataAttrOptions===!0&&n.data("i18n-options",i)}t.t=t.t||m,t.fn.i18n=function(e){return this.each(function(){n(t(this),e);var r=t(this).find("[data-i18n]");r.each(function(){n(t(this),e)})})}}function h(e,t,n){return i.each(t,function(t,i){typeof i=="object"?e=h(e,i,t):e=e.replace(new RegExp([r.interpolationPrefix,n?n+"."+t:t,r.interpolationSuffix].join(""),"g"),i)}),e}function p(e,t){while(e.indexOf(r.reusePrefix)!=-1){u++;if(u>r.maxRecursion)break;var n=e.indexOf(r.reusePrefix),i=e.indexOf(r.reuseSuffix,n)+r.reuseSuffix.length,s=e.substring(n,i),o=s.replace(r.reusePrefix,"").replace(r.reuseSuffix,""),a=g(o,t);e=e.replace(s,a)}return e}function d(e){return e.context&&typeof e.context=="string"}function v(e){return e.count!==undefined&&typeof e.count!="string"&&e.count!==1}function m(e,t){return u=0,g(e,t)}function g(e,t){t=t||{};var n,u,f=t.defaultValue||e;if(!s)return f;var l=r.ns.defaultNs;if(e.indexOf(r.nsseparator)>-1){var c=e.split(r.nsseparator);l=c[0],e=c[1]}if(d(t)){n=i.extend({},t),delete n.context,n.defaultValue=r.contextNotFound;var y=e+"_"+t.context;u=m(y,n);if(u!=r.contextNotFound)return h(u,{context:t.context})}if(v(t)){n=i.extend({},t),delete n.count,n.defaultValue=r.pluralNotFound;var b=e+r.pluralSuffix,S=E.get(o,t.count);S!=="other"&&(b=b+"_"+S),u=m(b,n);if(u!=r.pluralNotFound)return h(u,{count:t.count})}var x,T=e.split(r.keyseparator);for(var N=0,C=a.length;N<C;N++){if(x)break;var k=a[N],L=0,A=s[k][l];while(T[L])A=A&&A[T[L]],L++;if(A){if(typeof A!="string")if(!r.returnObjectTrees&&!t.returnObjectTrees)A="key '"+l+":"+e+" ("+k+")' "+"returned a object instead of string.",i.log(A);else for(var O in A)A[O]=g(e+"."+O,t);else A=h(A,t),A=p(A,t);x=A}}return!x&&r.sendMissing&&w.postMissing(l,e,f),x?x:f}function y(){var e,t=[];(function(){var e=window.location.search.substring(1),n=e.split("&");for(var r=0;r<n.length;r++){var i=n[r].indexOf("=");if(i>0){var s=n[r].substring(0,i),o=n[r].substring(i+1);t[s]=o}}})(),t.setLng&&(e=t.setLng);if(!e){var n=i.cookie.read("i18next");n&&(e=n)}return!e&&navigator&&(e=navigator.language?navigator.language:navigator.userLanguage),e}function b(){return o}Array.prototype.indexOf||(Array.prototype.indexOf=function(e){"use strict";if(this==null)throw new TypeError;var t=Object(this),n=t.length>>>0;if(n===0)return-1;var r=0;arguments.length>0&&(r=Number(arguments[1]),r!=r?r=0:r!=0&&r!=Infinity&&r!=-Infinity&&(r=(r>0||-1)*Math.floor(Math.abs(r))));if(r>=n)return-1;var i=r>=0?r:Math.max(n-Math.abs(r),0);for(;i<n;i++)if(i in t&&t[i]===e)return i;return-1});var e=this,t=e.jQuery,n={};typeof module!="undefined"&&module.exports?module.exports=n:t?t.i18n=t.i18n||n:e.i18n=e.i18n||n;var r={lng:undefined,lowerCaseLng:!1,returnObjectTrees:!1,fallbackLng:"dev",ns:"translation",nsseparator:":",keyseparator:".",debug:!1,resGetPath:"locales/__lng__/__ns__.json",resPostPath:"locales/add/__lng__/__ns__",getAsync:!0,postAsync:!0,resStore:undefined,useLocalStorage:!0,dynamicLoad:!1,sendMissing:!1,sendType:"POST",interpolationPrefix:"__",interpolationSuffix:"__",reusePrefix:"$t(",reuseSuffix:")",pluralSuffix:"_plural",pluralNotFound:["plural_not_found",Math.random()].join(""),contextNotFound:["context_not_found",Math.random()].join(""),setJqueryExt:!0,useDataAttrOptions:!1,cookieExpirationTime:undefined},i={extend:t?t.extend:undefined,each:t?t.each:undefined,ajax:t?t.ajax:undefined,detectLanguage:y,log:function(e){r.debug&&console.log(e)},cookie:{create:function(e,t,n){var r;if(n){var i=new Date;i.setTime(i.getTime()+n*60*1e3),r="; expires="+i.toGMTString()}else r="";document.cookie=e+"="+t+r+"; path=/"},read:function(e){var t=e+"=",n=document.cookie.split(";");for(var r=0;r<n.length;r++){var i=n[r];while(i.charAt(0)==" ")i=i.substring(1,i.length);if(i.indexOf(t)===0)return i.substring(t.length,i.length)}return null},remove:function(e){this.create(e,"",-1)}}},s,o,u=0,a=[],w={load:function(e,t,n){t.useLocalStorage?w._loadLocal(e,function(r,s){var o=[];for(var u=0,a=e.length;u<a;u++)s[e[u]]||o.push(e[u]);o.length>0?w._fetch(o,t,function(e,t){i.extend(s,t),w._storeLocal(t),n(null,s)}):n(null,s)}):w._fetch(e,t,function(e,t){n(null,t)})},_loadLocal:function(e,t){var n={};if(window.localStorage){var r=e.length;i.each(e,function(e,i){var s=window.localStorage.getItem("res_"+i);s&&(n[i]=JSON.parse(s)),r--,r===0&&t(null,n)})}},_storeLocal:function(e){if(window.localStorage)for(var t in e)window.localStorage.setItem("res_"+t,JSON.stringify(e[t]));return},_fetch:function(e,t,n){var s=t.ns,o={};if(!t.dynamicLoad){var u=s.namespaces.length*e.length,a;i.each(s.namespaces,function(t,r){i.each(e,function(e,t){w._fetchOne(t,r,function(e,i){e&&(a=a||[],a.push(e)),o[t]=o[t]||{},o[t][r]=i,u--,u===0&&n(a,o)})})})}else{var f=h(r.resGetPath,{lng:e.join("+"),ns:s.namespaces.join("+")});i.ajax({url:f,success:function(e,t,r){i.log("loaded: "+f),n(null,e)},error:function(e,t,r){i.log("failed loading: "+f),n("failed loading resource.json error: "+r)},dataType:"json",async:r.getAsync})}},_fetchOne:function(e,t,n){var s=h(r.resGetPath,{lng:e,ns:t});i.ajax({url:s,success:function(e,t,r){i.log("loaded: "+s),n(null,e)},error:function(e,t,r){i.log("failed loading: "+s),n(r,{})},dataType:"json",async:r.getAsync})},postMissing:function(e,t,n){var o={};o[t]=n;var u=h(r.resPostPath,{lng:r.fallbackLng,ns:e});i.ajax({url:u,type:r.sendType,data:o,success:function(o,a,f){i.log("posted missing key '"+t+"' to: "+u),s[r.fallbackLng][e][t]=n},error:function(e,n,r){i.log("failed posting missing key '"+t+"' to: "+u)},dataType:"json",async:r.postAsync})}},E={rules:{sl:function(e){return e%100===1?"one":e%100===2?"two":e%100===3||e%100===4?"few":"other"},ar:function(e){return e===0?"zero":e===1?"one":e===2?"two":e%100>=3&&e%100<=10?"few":e%100>=11&&e%100<=99?"many":"other"}},addRule:function(e,t){E.rules[e]=t},get:function(e,t){function r(e,t){return E.rules[e]?E.rules[e](t):t===1?"one":"other"}var n=e.split("-");return n.length===2?r(n[0],t):r(e,t)}};n.init=f,n.setLng=l,n.t=m,n.translate=m,n.detectLanguage=i.detectLanguage,n.pluralExtensions=E,n.sync=w,n.functions=i,n.lng=b,n.options=r})()
+    // add indexOf to non ECMA-262 standard compliant browsers
+    if (!Array.prototype.indexOf) {  
+        Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {  
+            "use strict";  
+            if (this == null) {  
+                throw new TypeError();  
+            }  
+            var t = Object(this);  
+            var len = t.length >>> 0;  
+            if (len === 0) {  
+                return -1;  
+            }  
+            var n = 0;  
+            if (arguments.length > 0) {  
+                n = Number(arguments[1]);  
+                if (n != n) { // shortcut for verifying if it's NaN  
+                    n = 0;  
+                } else if (n != 0 && n != Infinity && n != -Infinity) {  
+                    n = (n > 0 || -1) * Math.floor(Math.abs(n));  
+                }  
+            }  
+            if (n >= len) {  
+                return -1;  
+            }  
+            var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);  
+            for (; k < len; k++) {  
+                if (k in t && t[k] === searchElement) {  
+                    return k;  
+                }  
+            }  
+            return -1;  
+        }
+    }  
+
+    var root = this
+      , $ = root.jQuery
+      , i18n = {};
+
+    // Export the i18next object for **CommonJS**. 
+    // If we're not in CommonJS, add `i18n` to the
+    // global object or to jquery.
+    if (typeof module !== 'undefined' && module.exports) {
+        module.exports = i18n;
+    } else {
+        if ($) {
+            $.i18n = $.i18n || i18n;
+        } else {
+            root.i18n = root.i18n || i18n;
+        }
+    }
+
+    // defaults
+    var o = {
+        lng: undefined,
+        lowerCaseLng: false,
+        returnObjectTrees: false,
+        fallbackLng: 'dev',
+        ns: 'translation',
+        nsseparator: ':',
+        keyseparator: '.',
+        debug: false,
+        
+        resGetPath: 'locales/__lng__/__ns__.json',
+        resPostPath: 'locales/add/__lng__/__ns__',
+
+        getAsync: true,
+        postAsync: true,
+
+        resStore: undefined,
+        useLocalStorage: true,
+
+        dynamicLoad: false,
+        sendMissing: false,
+        sendType: 'POST',
+
+        interpolationPrefix: '__',
+        interpolationSuffix: '__',
+        reusePrefix: '$t(',
+        reuseSuffix: ')',
+        pluralSuffix: '_plural',
+        pluralNotFound: ['plural_not_found', Math.random()].join(''),
+        contextNotFound: ['context_not_found', Math.random()].join(''),
+
+        setJqueryExt: true,
+        useDataAttrOptions: false,
+        cookieExpirationTime: undefined
+    };
+
+    // move dependent functions to a container so that
+    // they can be overriden easier in no jquery environment (node.js)
+    var f = {
+        extend: $ ? $.extend : undefined,
+        each: $ ? $.each : undefined,
+        ajax: $ ? $.ajax : undefined,
+        detectLanguage: detectLanguage,
+        log: function(str) {
+            if (o.debug) console.log(str);
+        },
+        cookie: {
+            create: function(name,value,minutes) {
+                    var expires;
+                    if (minutes) {
+                            var date = new Date();
+                            date.setTime(date.getTime()+(minutes*60*1000));
+                            expires = "; expires="+date.toGMTString();
+                    }
+                    else expires = "";
+                    document.cookie = name+"="+value+expires+"; path=/";
+            },
+            
+            read: function(name) {
+                    var nameEQ = name + "=";
+                    var ca = document.cookie.split(';');
+                    for(var i=0;i < ca.length;i++) {
+                            var c = ca[i];
+                            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length,c.length);
+                    }
+                    return null;
+            },
+            
+            remove: function(name) {
+                    this.create(name,"",-1);
+            }
+        }
+    };
+
+    var resStore
+      , currentLng
+      , replacementCounter = 0
+      , languages = [];
+
+    function init(options, cb) {
+        
+        if (typeof options === 'function') {
+            cb = options;
+            options = {};
+        }
+        options = options || {};
+        
+        // override defaults with passed in options
+        f.extend(o, options);
+
+        // create namespace object if namespace is passed in as string
+        if (typeof o.ns == 'string') {
+            o.ns = { namespaces: [o.ns], defaultNs: o.ns};
+        }
+
+        if (!o.lng) o.lng = f.detectLanguage(); 
+        if (o.lng) {
+            // set cookie with lng set (as detectLanguage will set cookie on need)
+            f.cookie.create('i18next', o.lng, o.cookieExpirationTime);
+        } else {
+            o.lng =  o.fallbackLng;
+            f.cookie.remove('i18next');
+        }
+
+        languages = [];
+        if (o.lng.indexOf('-') === 2 && o.lng.length === 5) {
+            var parts = o.lng.split('-');
+
+            o.lng = o.lowerCaseLng ? 
+                parts[0].toLowerCase() +  '-' + parts[1].toLowerCase() :
+                parts[0].toLowerCase() +  '-' + parts[1].toUpperCase();
+
+            languages.push(o.lng);
+            languages.push(o.lng.substr(0, 2));
+        } else {
+            languages.push(o.lng);
+        }
+
+        if (languages.indexOf(o.fallbackLng) === -1) languages.push(o.fallbackLng);
+        currentLng = o.lng;
+        f.log('currentLng set to: ' + currentLng);
+
+        // add JQuery extensions
+        if ($ && o.setJqueryExt) addJqueryFunct();
+
+        // jQuery deferred
+        var deferred;
+        if ($ && $.Deferred) {
+            deferred = $.Deferred();
+        }
+
+        // return immidiatly if res are passed in
+        if (o.resStore) {
+            resStore = o.resStore;
+            if (cb) cb(translate);
+            if (deferred) deferred.resolve();
+            return deferred;
+        }
+
+        // else load them
+        i18n.sync.load(languages, o, function(err, store) {
+            resStore = store;
+            if (cb) cb(translate);
+            if (deferred) deferred.resolve();
+        });
+
+        return deferred;
+    }
+
+    function setLng(lng, cb) {
+        init({lng: lng}, cb);
+    }
+
+    function addJqueryFunct() {
+        // $.t shortcut
+        $.t = $.t || translate;
+
+        function parse(ele, key, options) {
+            if (key.length === 0) return;
+
+            var attr = 'text';
+
+            if (key.indexOf('[') === 0) {
+                var parts = key.split(']');
+                key = parts[1];
+                attr = parts[0].substr(1, parts[0].length-1);
+            }
+
+            if (key.indexOf(';') === key.length-1) {
+                key = key.substr(0, key.length-2);
+            }
+
+            var optionsToUse;
+            if (attr === 'html') {
+                optionsToUse = $.extend({ defaultValue: ele.html() }, options);
+                ele.html($.t(key, optionsToUse));
+            } 
+            else if (attr === 'text') {
+                optionsToUse = $.extend({ defaultValue: ele.text() }, options);
+                ele.text($.t(key, optionsToUse));
+            } else {
+                optionsToUse = $.extend({ defaultValue: ele.attr(attr) }, options);
+                ele.attr(attr, $.t(key, optionsToUse));
+            }
+        }
+
+        function localize(ele, options) {
+            var key = ele.attr('data-i18n');
+            if (!key) return;
+
+            if (!options && o.useDataAttrOptions === true) {
+                options = ele.data("i18n-options");
+            }
+            options = options || {};
+
+            if (key.indexOf(';') <= key.length-1) {
+                var keys = key.split(';');
+
+                $.each(keys, function(m, k) {
+                    parse(ele, k, options);
+                });
+
+            } else {
+                parse(ele, k, options);
+            }
+
+            if (o.useDataAttrOptions === true) ele.data("i18n-options", options);
+        }
+
+        // fn
+        $.fn.i18n = function (options) {
+            return this.each(function() {
+                // localize element itself
+                localize($(this), options);
+
+                // localize childs
+                var elements =  $(this).find('[data-i18n]');
+                elements.each(function() { 
+                    localize($(this), options);
+                });
+            });
+        };
+    }
+
+    function applyReplacement(str, replacementHash, nestedKey) {
+        f.each(replacementHash, function(key, value) {
+            if (typeof value === 'object') {
+                str = applyReplacement(str, value, key);
+            } else {
+                str = str.replace(new RegExp([o.interpolationPrefix, nestedKey ? nestedKey + '.' + key : key, o.interpolationSuffix].join(''), 'g'), value);
+            }
+        });
+        return str;
+    }
+
+    function applyReuse(translated, options){
+        while (translated.indexOf(o.reusePrefix) != -1) {
+            replacementCounter++;
+            if (replacementCounter > o.maxRecursion) { break; } // safety net for too much recursion
+            var index_of_opening = translated.indexOf(o.reusePrefix);
+            var index_of_end_of_closing = translated.indexOf(o.reuseSuffix, index_of_opening) + o.reuseSuffix.length;
+            var token = translated.substring(index_of_opening, index_of_end_of_closing);
+            var token_sans_symbols = token.replace(o.reusePrefix, '').replace(o.reuseSuffix, '');
+            var translated_token = _translate(token_sans_symbols,options);
+            translated = translated.replace(token,translated_token);
+        }
+        return translated;
+    }
+
+    function hasContext(options) {
+        return (options.context && typeof options.context == 'string');
+    }
+
+    function needsPlural(options) {
+        return (options.count !== undefined && typeof options.count != 'string' && options.count !== 1);
+    }
+
+    function translate(key, options){
+        replacementCounter = 0;
+        return _translate(key, options);
+    }
+
+    function _translate(key, options){
+        options = options || {};
+
+        var optionsSansCount, translated
+          , notfound = options.defaultValue || key;
+
+        if (!resStore) { return notfound; } // no resStore to translate from
+
+        var ns = o.ns.defaultNs;
+        if (key.indexOf(o.nsseparator) > -1) {
+            var parts = key.split(o.nsseparator);
+            ns = parts[0];
+            key = parts[1];
+        }
+
+        if (hasContext(options)) {
+            optionsSansCount = f.extend({}, options);
+            delete optionsSansCount.context;
+            optionsSansCount.defaultValue = o.contextNotFound;
+
+            var contextKey = key + '_' + options.context;
+            
+            translated = translate(contextKey, optionsSansCount);
+            if (translated != o.contextNotFound) {
+                return applyReplacement(translated, { context: options.context }); // apply replacement for context only
+            } // else continue translation with original/nonContext key
+        }
+
+        if (needsPlural(options)) {
+            optionsSansCount = f.extend({}, options);
+            delete optionsSansCount.count;
+            optionsSansCount.defaultValue = o.pluralNotFound;
+
+            var pluralKey = key + o.pluralSuffix;
+            var pluralExtension = pluralExtensions.get(currentLng, options.count);
+            if (pluralExtension !== 'other') { pluralKey = pluralKey + '_' + pluralExtension; }
+            
+            translated = translate(pluralKey, optionsSansCount);
+            if (translated != o.pluralNotFound) {
+                return applyReplacement(translated, { count: options.count }); // apply replacement for count only
+            } // else continue translation with original/singular key
+        }
+
+        var found;
+        var keys = key.split(o.keyseparator);
+        for (var i = 0, len = languages.length; i < len; i++ ) {
+            if (found) break;
+
+            var l = languages[i];
+
+            var x = 0;
+            var value = resStore[l][ns];
+            while (keys[x]) {
+                value = value && value[keys[x]];
+                x++;
+            }
+            if (value) {
+                if (typeof value !== 'string') {
+                    if (!o.returnObjectTrees && !options.returnObjectTrees) {
+                        value = 'key \'' + ns + ':' + key + ' (' + l + ')\' ' + 
+                                'returned a object instead of string.';
+                        f.log(value);
+                    } else {
+                        for (var m in value) {
+                            // apply translation on childs
+                            value[m] = _translate(key + '.' + m, options);
+                        }
+                    }
+                } else {
+                    value = applyReplacement(value, options);
+                    value = applyReuse(value, options);
+                }
+                found = value;
+            }
+        }
+
+        if (!found && o.sendMissing) {
+            sync.postMissing(ns, key, notfound);
+        }
+
+        return (found) ? found : notfound;
+    }
+
+    function detectLanguage() {
+        var detectedLng;
+
+        // get from qs
+        var qsParm = [];
+        (function() {
+            var query = window.location.search.substring(1);
+            var parms = query.split('&');
+            for (var i=0; i<parms.length; i++) {
+                var pos = parms[i].indexOf('=');
+                if (pos > 0) {
+                    var key = parms[i].substring(0,pos);
+                    var val = parms[i].substring(pos+1);
+                    qsParm[key] = val;
+                }
+            }
+        })();
+        if (qsParm.setLng) {
+            detectedLng = qsParm.setLng;
+        }
+
+        // get from cookie
+        if (!detectedLng) {
+            var c = f.cookie.read('i18next');
+            if (c) detectedLng = c;
+        }
+
+        // get from navigator
+        if (!detectedLng && navigator) {
+            detectedLng =  (navigator.language) ? navigator.language : navigator.userLanguage;
+        }
+        
+        return detectedLng;
+    }
+
+    function lng() {
+        return currentLng;
+    }
+
+    var sync = {
+
+        load: function(lngs, options, cb) {
+            if (options.useLocalStorage) {
+                sync._loadLocal(lngs, function(err, store) {
+                    var missingLngs = [];
+                    for (var i = 0, len = lngs.length; i < len; i++) {
+                        if (!store[lngs[i]]) missingLngs.push(lngs[i]);
+                    }
+
+                    if (missingLngs.length > 0) {
+                        sync._fetch(missingLngs, options, function(err, fetched){
+                            f.extend(store, fetched);
+                            sync._storeLocal(fetched);
+
+                            cb(null, store);
+                        });
+                    } else {
+                        cb(null, store);
+                    }
+                });
+            } else {
+                sync._fetch(lngs, options, function(err, store){
+                    cb(null, store);
+                });
+            }
+        },
+
+        _loadLocal: function(lngs, cb) {
+            var store = {};
+
+            if(window.localStorage) {
+
+                var todo = lngs.length;
+
+                f.each(lngs, function(key, lng) {
+                    var local = window.localStorage.getItem('res_' + lng);
+
+                    if (local) {
+                        store[lng] = JSON.parse(local);
+                    }
+
+                    todo--; // wait for all done befor callback
+                    if (todo === 0) cb(null, store);
+                });
+            }
+        },
+
+        _storeLocal: function(store) {
+            if(window.localStorage) {
+                for (var m in store) {
+                    window.localStorage.setItem('res_' + m, JSON.stringify(store[m]));
+                }
+            }
+            return;
+        },
+
+        _fetch: function(lngs, options, cb) {
+            var ns = options.ns
+              , store = {};
+            
+            if (!options.dynamicLoad) {
+                var todo = ns.namespaces.length * lngs.length
+                  , errors;
+
+                // load each file individual
+                f.each(ns.namespaces, function(nsIndex, nsValue) {
+                    f.each(lngs, function(lngIndex, lngValue) {
+                        sync._fetchOne(lngValue, nsValue, function(err, data) {
+                            if (err) {
+                                errors = errors || [];
+                                errors.push(err);
+                            }
+                            store[lngValue] = store[lngValue] || {};
+                            store[lngValue][nsValue] = data;
+
+                            todo--; // wait for all done befor callback
+                            if (todo === 0) cb(errors, store);
+                        });
+                    });
+                });
+            } else {
+                var url = applyReplacement(o.resGetPath, { lng: lngs.join('+'), ns: ns.namespaces.join('+') });
+                // load all needed stuff once
+                f.ajax({
+                    url: url,
+                    success: function(data, status, xhr) {
+                        f.log('loaded: ' + url);
+                        cb(null, data);
+                    },
+                    error : function(xhr, status, error) {
+                        f.log('failed loading: ' + url);
+                        cb('failed loading resource.json error: ' + error);
+                    },
+                    dataType: "json",
+                    async : o.getAsync
+                });         
+            }
+        },
+
+        _fetchOne: function(lng, ns, done) {
+            var url = applyReplacement(o.resGetPath, { lng: lng, ns: ns });
+            f.ajax({
+                url: url,
+                success: function(data, status, xhr) {
+                    f.log('loaded: ' + url);
+                    done(null, data);
+                },
+                error : function(xhr, status, error) {
+                    f.log('failed loading: ' + url);
+                    done(error, {});
+                },
+                dataType: "json",
+                async : o.getAsync
+            });
+        },
+
+        postMissing: function(ns, key, defaultValue) {
+            var payload = {};
+            payload[key] = defaultValue;
+
+            var url = applyReplacement(o.resPostPath, { lng: o.fallbackLng, ns: ns });
+            f.ajax({
+                url: url,
+                type: o.sendType,
+                data: payload,
+                success: function(data, status, xhr) {
+                    f.log('posted missing key \'' + key + '\' to: ' + url);
+                    resStore[o.fallbackLng][ns][key] = defaultValue;
+                },
+                error : function(xhr, status, error) {
+                    f.log('failed posting missing key \'' + key + '\' to: ' + url);
+                },
+                dataType: "json",
+                async : o.postAsync
+            });
+        }
+    };
+
+    // definition http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
+    var pluralExtensions = {
+        
+        rules: {
+            'sl': function (n) {
+                return n % 100 === 1 ? 'one' : n % 100 === 2 ? 'two' : n % 100 === 3 || n % 100 === 4 ? 'few' : 'other';
+            },
+            'ar': function (n) {
+                return n === 0 ? 'zero' : n === 1 ? 'one' : n === 2 ? 'two' : n % 100 >= 3 && n % 100 <= 10 ? 'few' : n % 100 >= 11 && n % 100 <= 99 ? 'many' : 'other';
+            }
+        },
+
+        // for demonstration only sl and ar is added but you can add your own pluralExtensions
+        addRule: function(lng, fc) {
+            pluralExtensions.rules[lng] = fc;    
+        },
+
+        get: function(lng, count) {
+            var parts = lng.split('-');
+
+            function getResult(l, c) {
+                if (pluralExtensions.rules[l]) {
+                    return pluralExtensions.rules[l](c);
+                } else {
+                    return c === 1 ? 'one' : 'other';
+                }
+            }
+                        
+            if (parts.length === 2) {
+                return getResult(parts[0], count);
+            } else {
+                return getResult(lng, count);
+            }
+        }
+
+    };
+
+    // public api interface
+    i18n.init = init;
+    i18n.setLng = setLng;
+    i18n.t = translate;
+    i18n.translate = translate;
+    i18n.detectLanguage = f.detectLanguage;
+    i18n.pluralExtensions = pluralExtensions;
+    i18n.sync = sync;
+    i18n.functions = f;
+    i18n.lng = lng;
+    i18n.options = o;
+
+})();

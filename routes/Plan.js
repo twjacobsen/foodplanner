@@ -4,25 +4,19 @@
  */
  
 exports.getDay = function(req, res){
-  console.log(req.params.date)
   Plan.find({'date' : req.params.date}, function(err, plan){
-    console.log('day', plan)
     res.send(plan);
   });
 }
 
 exports.getWeek = function(req, res){
-  var weekOffs = req.params.weekOffset || 0;
+  var fromDate = (req.params.fromDate ? new Date(req.params.fromDate*1) : new Date());
   
   var  monday
       ,sunday
-      ,offs = (new Date().getDay()+6) % 7;
+      ,offs = (fromDate.getDay()+6) % 7;
     
-  monday = new Date().setHours(-offs*24);
-  if(weekOffs){
-    weekOffs = 7*weekOffs;
-    monday = new Date(monday).setHours(weekOffs*24);
-  }
+  monday = fromDate.setHours(-offs*24);
   sunday = new Date(monday).setHours(6*24);
   
   var _plans = [];
@@ -32,7 +26,7 @@ exports.getWeek = function(req, res){
            day : i
           ,localDay : req.i18n.t('days.'+i).capitalize() 
           ,date : new Date(new Date(monday).setHours(i*24)).setHours(1,0,0,0)
-          ,meal : ''
+          ,recipeName : ''
         }
     _plans.push(plan);
   }
@@ -40,10 +34,12 @@ exports.getWeek = function(req, res){
     .where('date').gte(new Date(monday).setHours(0,0,0,0))
     .where('date').lte(new Date(sunday).setHours(23,59,59,0))
     .run(function(err, plans){
-      for(var i = 0; i < plans.length; ++i){
-        var day = (new Date(plans[i].date).getDay()+6) % 7;
-        plans[i].day = _plans[day].day;
-        _plans[day] = plans[i];
+      if(plans && plans.length > 0){
+        for(var i = 0; i < plans.length; ++i){
+          var day = (new Date(plans[i].date).getDay()+6) % 7;
+          plans[i].day = _plans[day].day;
+          _plans[day] = plans[i];
+        }
       }
       res.send(_plans);
     });
@@ -51,20 +47,21 @@ exports.getWeek = function(req, res){
 
 exports.create = function(req, res){
   var  date = new Date(req.body.date*1).setHours(1,0,0,0)
-      ,meal = req.body.meal
-      ,day = (new Date(date).getDay() + 6) % 7;
+      ,recipeName = req.body.recipeName
+      ,recipeId = req.body.recipeId;
 
   var plan = new Plan({
      date : date
-    ,day : day
-    ,meal : meal
+    ,recipeName : recipeName
+    ,recipe : recipeId
   });
+  
   plan.save(function(){
     res.send(plan);
   });
 }
 
-exports.update = function(req, res){
+exports.save = function(req, res){
   Plan.findById(req.params.id, function(err, plan){
     if(!plan){
       exports.create(req, res);
@@ -80,10 +77,8 @@ exports.update = function(req, res){
  *  We do not DELETE plans, just remove the .meal-property
  */
 exports.remove = function(req, res){
-  Plan.findById(req.params.id, function(err, plan){
-    delete plan.meal;
-    plan.save(function(){
-      res.send(plan);
-    });
+  Plan.remove({ '_id' : req.params.id}, function(err, plan){
+    if(err) res.send(err);
+    else res.send(true);
   });
 }

@@ -2,7 +2,7 @@
 
 angular.module('weekServices', ['ngResource'])
   .factory('Week', function($resource){
-    return $resource('week/:weekOffset', {weekOffset : 0}, {
+    return $resource('week/:fromDate', {}, {
       
     });
   });
@@ -17,6 +17,13 @@ angular.module('dayServices', ['ngResource'])
 angular.module('recipeServices', ['ngResource'])
   .factory('Recipe', function($resource){
     return $resource('recipe/:name', {}, {
+    
+    });
+  });
+
+angular.module('ingredientServices', ['ngResource'])
+  .factory('Ingredient', function($resource){
+    return $resource('ingredient/:name', {}, {
     
     });
   });

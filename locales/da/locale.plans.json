@@ -1,4 +1,6 @@
 {
-   "addmeal" : "tilføj ret"
-  ,"typemealname" : "indtast rettens navn"
+   "addMeal" : "Tilføj ret"
+  ,"weekPlan" : "Uge-plan"
+  ,"typeMealName" : "Indtast rettens navn"
+  ,"currentWeek" : "Gå til nuværende uge"
 }

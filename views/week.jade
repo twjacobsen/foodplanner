@@ -1,7 +1,11 @@
 .row-fluid
-  .span12
-    h1 Week-plan
-    h3.page-header From {{week[0].date | date:short}} to {{week[6].date | date:short}}
+  .span12.page-header
+    h1= t('locale.plans:weekPlan')
+    h3= capitalize(t('misc.from'))
+      |  {{week[0].date | date:'d. MMM'}} 
+      span= t('misc.to') 
+      |  {{week[6].date | date:'d. MMM'}}
+    a(ng-href="#/week")= t('locale.plans:currentWeek')
     
 .row-fluid
   .span1.prev-week
@@ -12,10 +16,10 @@
       li(ng-repeat="day in week", date="{{day.date}}")
         div
           h2.day {{day.localDay}}
-          div(ng-switch on="day.recipe")
-            a.btn.meal.update-meal(ng-switch-when="", ng-href="#/day/{{day.date}}") Add recipe
+          div(ng-switch on="day.recipeName")
+            a.btn.meal.update-meal(ng-switch-when="", ng-href="#/day/{{day.date}}")= t('locale.plans:addMeal')
             div.update-meal.clickable(ng-switch-default, ng-href="#/day/{{day.date}}")
-              h3.meal {{day.recipe}}
+              h3.meal {{day.recipeName}}
                 span.help-inline
                   a.icon-pencil
 

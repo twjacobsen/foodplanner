@@ -1,9 +1,40 @@
 {
-    "name": "application-name"
-  , "version": "0.0.1"
-  , "private": true
-  , "dependencies": {
-      "express": "2.5.8"
-    , "jade": ">= 0.0.1"
+  "name": "foodplanner",
+  "version": "0.1.2-0",
+  "bundleDependencies": [
+    "mongoose",
+    "jade",
+    "connect",
+    "express",
+    "i18next",
+    "nib",
+    "socket.io",
+    "stylus"
+  ],
+  "environment": "development",
+  "subdomain": "nslr",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "engines": {
+    "node": "0.8.x"
+  },
+  "description": "foodplanner",
+  "main": "app.js",
+  "devDependencies": {
+    "mocha": "~1.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nesler/foodplanner.git"
+  },
+  "author": "Thor Jacobsen",
+  "license": "BSD",
+  "dependencies": {
+    "nib": "0.8.x",
+    "i18next": "1.3.x",
+    "stylus": "0.29.x",
+    "express": "2.5.x",
+    "mongoose": "2.6.x"
   }
 }

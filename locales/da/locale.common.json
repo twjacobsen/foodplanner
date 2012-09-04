@@ -3,6 +3,8 @@
      "save": "gem"
     ,"add": "tilføj"
     ,"cancel" : "annuller"
+    ,"from" : "fra"
+    ,"to" : "til"
   }
   ,"days" : {
      "0" : "mandag"
@@ -18,5 +20,10 @@
     ,"signin" : "Log ind"
     ,"signout" : "Log ud"
     ,"welcome" : "Velkommen"
+  }
+  ,"pages" : {
+     "plans": "Uge-plan"
+    ,"list": "Indkøbsliste"
+    ,"recipes": "Opskrifter"
   }
 }

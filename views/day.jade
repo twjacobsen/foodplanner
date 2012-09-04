@@ -1,6 +1,7 @@
 .row-fluid
-  .span12
-    h1.page-header {{date | date:short}}
+  .span12.page-header
+    h1 {{date | date:short}}
+    a(ng-href="#/week/{{date}}") Back
     
 .row-fluid
   .span12
@@ -9,13 +10,17 @@
         input.input-xlarge.typeahead(type="text", placeholder="Start typing recipe...", ng-model="day.recipe")
         button.btn Select recipe
   
-  #recipeContainer(style="display:none;")
+  #recipeContainer.hide
     div(ng-show="recipes[0]")
-      p OK Recipe
       div(ng-repeat="recipe in recipes")
-        p {{recipe.name}}
+        a {{recipe.name}}
     div(ng-hide="recipes[0]")
-      p NOK Recipe
+      p Recipe "{{day.recipe}}" does not exist. 
+        a(ng-href="#/recipe/{{day.recipe}}") Create the recipe 
+        | (
+        a(ng-click="explainWhy()") why?
+        | ) or 
+        a(ng-click="addRecipe()") use this recipe as-is.
         
 script
   $('.typeahead').typeahead({
