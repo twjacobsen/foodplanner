@@ -1,6 +1,6 @@
 {
   "name": "foodplanner",
-  "version": "0.1.2-0",
+  "version": "0.1.2-1",
   "bundleDependencies": [
     "mongoose",
     "jade",
@@ -35,6 +35,7 @@
     "i18next": "1.3.x",
     "stylus": "0.29.x",
     "express": "2.5.x",
-    "mongoose": "2.6.x"
+    "mongoose": "2.6.x",
+    "jade": ">= 0.0.1"
   }
 }
