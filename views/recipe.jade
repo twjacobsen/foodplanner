@@ -1,0 +1,58 @@
+.row-fluid
+  .span12.page-header
+    h1 {{recipe.recipeState}} recipe "{{recipe.recipeName}}"
+    
+.row-fluid
+  .span12
+    form.form-horizontal
+      div.control-group
+        label.control-label(for="inputRecipeName") Recipe name
+        .controls
+          input(type="text", placeholder="Recipe name", ng-model="recipe.recipeName", id="inputRecipeName", required)
+      div.control-group
+        label.control-label(for="textareaRecipeProcedure") Procedure
+        .controls
+          textarea(rows="5", id="textareaRecipeProcedure", ng-model="recipe.procedure")
+      div.control-group
+        label.control-label Ingredients 
+          a(href="#addIngredientDialog", data-toggle="modal")
+            i.icon-plus-sign
+        .controls
+
+          div(ng-repeat="ingredient in recipe.ingredients")
+            p {{ingredient}}
+
+//Modal dialog to create ingredient
+.modal.hide.fade(id="addIngredientDialog")
+  form.form-horizontal(ng-submit="addIngredient()")
+    .modal-header
+      button.close(data-dismiss="modal") &times;
+      h3 Add ingredient
+    .modal-body
+      .control-group
+        label.control-label(for="inputIngredientName") Ingredient
+        .controls
+          input.input-large.typeahead(type="text", name="inputIngredientName", required, ng-model="recipe.newIngredient.name")
+      .control-group
+        label.control-label(for="inputIngredientAmount") Amount
+        .controls
+          input.input-medium(type="text", ng-pattern="/(\d*)(\.\d*){0,1}/", id="inputIngredientAmount", ng-model="recipe.newIngredient.amount")
+          input.input-mini(type="text", placeholder="pcs/kg/...", id="inputIngredientAmountUnit", ng-model="recipe.newIngredient.amountUnit")
+    .modal-footer
+      button.btn(data-dismiss="modal") Cancel
+      button.btn.btn-primary(type="submit") Add
+
+script
+  $('.typeahead').typeahead({
+    source : function(typeahead, query){
+      if(!query)
+        return;
+      $.get('/ingredients/' + query, function(data){
+        typeahead.process(data);
+      });
+    }
+    ,property: 'name'
+/*    ,onselect: function(obj){
+      this.$element.closest('form').submit();
+    } */
+  });
