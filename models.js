@@ -7,18 +7,25 @@ var  User
 function defineModels(mongoose, cb){
   var  Schema = mongoose.Schema
       ,ObjectId = Schema.ObjectId
+      ,crypto = require('crypto');
   
   /**
    *  Schemas
    */
   User = new Schema({
-      userName : {type : String, unique : true}
-     ,password : String
+      username : {type : String, unique : true}
+     ,password : {type : String, set : function(password){
+          this.salt = this.makeSalt();
+          this.hashed_password = this.encryptPassword(password);
+        }
+      }
      ,email : {type : String, unique : true}
+     ,firstName: String
+     ,lastName: String
   });
 
   Plan = new Schema({
-      date : Date
+      date : Number
      ,recipeName : String
      ,recipe : {type : ObjectId, ref: 'Recipe'}
      ,userID : { type: ObjectId, ref: "User"}
@@ -28,7 +35,7 @@ function defineModels(mongoose, cb){
       name : {type : String, set : capitalize}
      ,userID : { type: ObjectId, ref: "User"}
      ,items : [{
-         ingredient : [Ingredient]
+         ingredient : Ingredient
         ,count : Number
      }]
   });
@@ -42,7 +49,7 @@ function defineModels(mongoose, cb){
      ,ingredients : [{
           amount : Number
          ,amountUnit : String
-         ,ingredient : [Ingredient]
+         ,ingredient : Ingredient
      }]
   });
 
@@ -63,6 +70,18 @@ function defineModels(mongoose, cb){
   /**
    *  Schema methods
    **/
+
+  User.methods.makeSalt = function(){
+    return Math.round((new Date().valueOf() * Math.random())) + 'very secret string';
+  }
+
+  User.methods.encryptPassword = function(password){
+    return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
+  }
+
+  User.methods.verifyPassword = function(password){
+    return this.encryptPassword(password) === this.hashed_password;
+  }
   
   mongoose.model('User', User);
   mongoose.model('Plan', Plan);

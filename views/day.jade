@@ -1,26 +1,28 @@
 .row-fluid
   .span12.page-header
-    h1 {{date | date:short}}
+    h1 {{date | date:'d. MMM'}}
     a(ng-href="#/week/{{date}}") Back
     
 .row-fluid
   .span12
-    form.well.form-inline(style="text-align:center;", ng-submit="getRecipes()")
+    form(style="text-align:center;", ng-submit="getRecipes()")
       .input-append
         input.input-xlarge.typeahead(type="text", placeholder="Start typing recipe...", ng-model="day.recipe")
         button.btn Select recipe
   
-  #recipeContainer.hide
-    div(ng-show="recipes[0]")
-      div(ng-repeat="recipe in recipes")
-        a {{recipe.name}}
-    div(ng-hide="recipes[0]")
+  #recipeContainer(ng-hide="hiddenContainer")
+    div(ng-show="noExactMatch")
       p Recipe "{{day.recipe}}" does not exist. 
-        a(ng-href="#/recipe/{{day.recipe}}") Create the recipe 
+        a(ng-click="newRecipe(day.recipe)") Create the recipe 
         | (
         a(ng-click="explainWhy()") why?
         | ) or 
         a(ng-click="addRecipe()") use this recipe as-is.
+    div(ng-show="recipes[0]")
+      legend Matching recipes
+      ul(ng-repeat="recipe in recipes")
+        li
+          a(ng-click="addRecipe(recipe)") {{recipe.name}}
         
 script
   $('.typeahead').typeahead({
@@ -33,6 +35,8 @@ script
     }
     ,property: 'name'
     ,onselect: function(obj){
-      this.$element.closest('form').submit();
+      //Force the model to reflect this change!
+      angular.element(this.$element).scope().day.recipe = obj.name;
+      this.$element.blur();
     }
   });

@@ -66,8 +66,8 @@ html(ng-app="foodplanner")
         window.t = $.t;
       });
     
-  body(data-spy="scroll")
-    #navar.navbar.navbar-fixed-top
+  body
+    #navbar.navbar.navbar-fixed-top
       .navbar-inner
         .container
           a.brand Food Planner
@@ -89,7 +89,7 @@ html(ng-app="foodplanner")
                 b.caret
               ul.dropdown-menu
                 != partial('partials/usermenu', {currentUser : currentUser})
-    div.container(ng-view)
+    #container.container(ng-view)
       
     
     

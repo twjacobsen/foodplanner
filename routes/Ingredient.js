@@ -2,54 +2,74 @@
 /*
  *  REST ingredinet (CRUD)
  */
- 
-exports.findByName = function(req, res, cb){
-  Ingredient.find({'name' : { $regex : req.params.query}}, function(err, ingredients){
-    console.log('ingredients', ingredients)
-    if(typeof cb == 'function')
-      cb(err, ingredients);
+
+var ObjectId = require('mongoose').Types.ObjectId;
+
+var findByName = function(req, res, cb){
+  var query = new RegExp(req.params.query, "i");
+  Ingredient.find({'name' : query}, function(err, ingredients){
+    if(err)
+      res.send(500, err);
     else
-      if(err)
-        console.log(err);
-      else
+      if(typeof cb == 'function'){
+        cb(ingredients);
+      }else{
         res.send(ingredients);
+      }
   });
 }
+ 
+exports.findByName = findByName;
 
 exports.get = function(req, res){
   req.params.query = req.params.name;
-  exports.findByName(req, res);
+  findByName(req, res, function(ingredients){
+    res.send(ingredients[0]);
+  });
 }
 
 exports.list = function(req, res){
   req.params.query = '.*';
-  exports.findByName(req, res);
+  findByName(req, res, null);
 }
 
 exports.save = function(req, res){
-  req.params.query = req.params.name;
-  exports.findByName(req, res, function(err, existing){
-    if(err)
-      return;
-    if(existing){
-      res.send(existing);
+  var name = req.params.name || req.body.name;
+  req.params.query = '^'+ name + '$';
+  findByName(req, res, function(existing){
+    console.log('foundArgs', arguments);
+    if(existing.length > 1){
+      res.send(500, 'How can there be more than 1 existing?');
       return;
     }
-    
+    if(existing && existing.length > 0){
+      res.send(existing[0]);
+      return;
+    }
+
     var ingredient = new Ingredient({
-       name : req.params.name
-      ,prodType : req.params.prodType || ''
+       name : name
+      ,prodType : req.body.prodType || ''
     });
-    
+
     ingredient.save(function(){
+      console.log('saved', ingredient);
       res.send(ingredient);
     });
   });
 }
 
 exports.remove = function(req, res){
-  Ingredient.remove({'_id' : req.params._id}, function(err){
-    if(err) res.send(err);
+  var id = req.params.id || req.body.id;
+  try{
+    id = mongoose.Types.ObjectId(id);
+  }catch(ex){
+    res.send(500, { error: 'Invalid id provided: ' + id});
+    return;
+  }
+
+  Ingredient.remove({'_id' : id}, function(err){
+    if(err) res.send(500, {error: err});
     else res.send(true);
   });
 }

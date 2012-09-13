@@ -21,9 +21,23 @@ angular.module('recipeServices', ['ngResource'])
     });
   });
 
+angular.module('recipesServices', ['ngResource'])
+  .factory('Recipes', function($resource){
+    return $resource('recipes/:query', {}, {
+    
+    });
+  });
+
 angular.module('ingredientServices', ['ngResource'])
   .factory('Ingredient', function($resource){
     return $resource('ingredient/:name', {}, {
-    
+      
+    });
+  });
+
+angular.module('shoppingListServices', ['ngResource'])
+  .factory('ShoppingList', function($resource){
+    return $resource('shoppingList/:date', {}, {
+      
     });
   });

@@ -1,10 +1,11 @@
 .row-fluid
   .span12.page-header
     h1= t('locale.plans:weekPlan')
-    h3= capitalize(t('misc.from'))
-      |  {{week[0].date | date:'d. MMM'}} 
-      span= t('misc.to') 
-      |  {{week[6].date | date:'d. MMM'}}
+      small  
+        span= t('misc.from')
+        |  {{week[0].date | date:'d. MMM'}} 
+        span= t('misc.to') 
+        |  {{week[6].date | date:'d. MMM'}}
     a(ng-href="#/week")= t('locale.plans:currentWeek')
     
 .row-fluid
@@ -17,12 +18,31 @@
         div
           h2.day {{day.localDay}}
           div(ng-switch on="day.recipeName")
-            a.btn.meal.update-meal(ng-switch-when="", ng-href="#/day/{{day.date}}")= t('locale.plans:addMeal')
-            div.update-meal.clickable(ng-switch-default, ng-href="#/day/{{day.date}}")
-              h3.meal {{day.recipeName}}
-                span.help-inline
-                  a.icon-pencil
+            a.btn(ng-switch-when="", ng-href="#/day/{{day.date}}")= t('locale.plans:addMeal')
+            a.btn(ng-switch-default, ng-click="showRecipe(day)", href="#showRecipeDialog", data-toggle="modal") {{day.shortRecipeName}}
 
   .span1.next-week
     h1.clickable
       a(ng-href="#/week/{{nextWeekOffset}}") >
+
+//Modal dialog to show recipe
+.modal.hide.fade(id="showRecipeDialog")
+  form.form-horizontal
+    .modal-header
+      h3 {{dialog.recipe.name}}
+    .modal-body
+      .row-fluid(ng-show="dialog.hasRecipeData")
+        .span6
+          p {{dialog.recipe.procedure}}
+        .span6
+          table.table.table-condensed.table-hover
+            tr(ng-repeat="ingredient in dialog.recipe.ingredients")
+              td {{ingredient.ingredient.name}}
+              td(style="text-align:right;") {{ingredient.amount}}
+              td {{ingredient.amountUnit}}
+      .row-fluid(ng-hide="dialog.hasRecipeData")
+        .span12
+          p No information available.
+    .modal-footer
+      button.btn.btn-primary(data-dismiss="modal") Close
+      button.btn(ng-click="editRecipe(dialog.recipe)", data-dismiss="modal") Edit

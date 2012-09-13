@@ -3,6 +3,8 @@
  *  REST Plan (CRUD)
  */
  
+var ObjectId = require('mongoose').Types.ObjectId;
+
 exports.getDay = function(req, res){
   Plan.find({'date' : req.params.date}, function(err, plan){
     res.send(plan);
@@ -37,8 +39,8 @@ exports.getWeek = function(req, res){
       if(plans && plans.length > 0){
         for(var i = 0; i < plans.length; ++i){
           var day = (new Date(plans[i].date).getDay()+6) % 7;
-          plans[i].day = _plans[day].day;
-          _plans[day] = plans[i];
+          _plans[day].recipeName = plans[i].recipeName;
+          _plans[day].recipe = plans[i].recipe;
         }
       }
       res.send(_plans);
@@ -46,9 +48,10 @@ exports.getWeek = function(req, res){
 }
 
 exports.create = function(req, res){
-  var  date = new Date(req.body.date*1).setHours(1,0,0,0)
+  console.log('body', req.body)
+  var  date = new Date(req.body.day*1).setHours(1,0,0,0)
       ,recipeName = req.body.recipeName
-      ,recipeId = req.body.recipeId;
+      ,recipeId = req.body.recipe;
 
   var plan = new Plan({
      date : date
@@ -67,7 +70,8 @@ exports.save = function(req, res){
       exports.create(req, res);
       return;
     }
-    plan.meal = req.body.meal;
+    plan.recipeName = req.body.recipeName;
+    plan.recipe = req.body.recipe;
     plan.save(function(){
       res.send(plan);
     });
@@ -77,8 +81,16 @@ exports.save = function(req, res){
  *  We do not DELETE plans, just remove the .meal-property
  */
 exports.remove = function(req, res){
-  Plan.remove({ '_id' : req.params.id}, function(err, plan){
-    if(err) res.send(err);
-    else res.send(true);
+  Plan.findById(req.params.id, function(err, plan){
+    if(err){
+      res.send(err);
+      return;
+    }
+    
+    delete plan.recipeName;
+    delete plan.recipe;
+    plan.save(function(){
+      res.send(plan);
+    })
   });
 }

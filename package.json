@@ -1,6 +1,6 @@
 {
   "name": "foodplanner",
-  "version": "0.1.2-1",
+  "version": "0.2.1-0",
   "bundleDependencies": [
     "mongoose",
     "jade",
@@ -36,6 +36,8 @@
     "stylus": "0.29.x",
     "express": "2.5.x",
     "mongoose": "2.6.x",
-    "jade": ">= 0.0.1"
+    "jade": ">= 0.0.1",
+    "passport": ">= 0.2.3",
+    "passport-local": ">= 0.2.3"
   }
 }

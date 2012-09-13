@@ -1,6 +1,6 @@
 body 
   position:relative;
-  padding-top: 90px;
+  padding-top: 30px;
   font-family: 'Dosis', sans-serif;
 
 
@@ -14,3 +14,9 @@ h1, h2, h3
 @import "parts/plans";
 @import "parts/recipes";
 @import "parts/shoppinglist";
+
+//Fix for bootstraps modal dialog on mobile devices, when scrolled a little down.
+//Source: http://stackoverflow.com/a/12233964/224751
+@media (max-width: 767px)
+  #container .modal.fade.in 
+    top: 5%;

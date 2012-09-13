@@ -3,9 +3,9 @@
     p.navbar-text= t('users.welcome') + ', '
       | #{currentUser.name}
   li
-    a(href="#/signout")= t('users.signout')
+    a(href="#/logout")= t('users.signout')
 - else
   li
     a(href="#/signup")= t('users.signup')
   li
-    a(href="#/signin")= t('users.signin')
+    a(href="#/login")= t('users.signin')

@@ -1,46 +1,53 @@
 .row-fluid
   .span12.page-header
-    h1 {{recipe.recipeState}} recipe "{{recipe.recipeName}}"
+    h1 {{recipeState}} recipe
     
 .row-fluid
   .span12
-    form.form-horizontal
-      div.control-group
-        label.control-label(for="inputRecipeName") Recipe name
-        .controls
-          input(type="text", placeholder="Recipe name", ng-model="recipe.recipeName", id="inputRecipeName", required)
-      div.control-group
-        label.control-label(for="textareaRecipeProcedure") Procedure
-        .controls
-          textarea(rows="5", id="textareaRecipeProcedure", ng-model="recipe.procedure")
-      div.control-group
-        label.control-label Ingredients 
-          a(href="#addIngredientDialog", data-toggle="modal")
-            i.icon-plus-sign
-        .controls
-
-          div(ng-repeat="ingredient in recipe.ingredients")
-            p {{ingredient}}
-
+    form.form-horizontal(ng-submit="saveRecipe()")
+      .row-fluid
+        .span12.control-group
+          label.control-label(for="inputRecipeName") Recipe name
+          .controls
+            input.span11(type="text", style="font-size:24px; height:36px;", placeholder="Recipe name", ng-model="recipe.name", id="inputRecipeName", required)
+      .row-fluid
+        .span4.control-group
+          label.control-label(for="textareaRecipeProcedure") Procedure
+          .controls
+            textarea(rows="5", id="textareaRecipeProcedure", ng-model="recipe.procedure")
+        .span8.control-group
+          label.control-label Ingredients 
+            a(href="#addIngredientDialog", data-toggle="modal")
+              i.icon-plus-sign
+          .controls
+            table.table.table-condensed.table-hover(style="width:210px;")
+              tr(ng-repeat="ingredient in recipe.ingredients")
+                td {{ingredient.ingredient.name}}
+                td(style="text-align:right;") {{ingredient.amount}}
+                td {{ingredient.amountUnit}}
+                td
+                  a(ng-click="removeIngredient(ingredient.ingredient._id)", style="color:#B94A48;")
+                    i.icon-minus-sign
+      .row-fluid.span12
+        button.btn.btn-primary(type="submit") Save
 //Modal dialog to create ingredient
 .modal.hide.fade(id="addIngredientDialog")
-  form.form-horizontal(ng-submit="addIngredient()")
+  form.form-horizontal
     .modal-header
-      button.close(data-dismiss="modal") &times;
       h3 Add ingredient
     .modal-body
       .control-group
         label.control-label(for="inputIngredientName") Ingredient
         .controls
-          input.input-large.typeahead(type="text", name="inputIngredientName", required, ng-model="recipe.newIngredient.name")
+          input.input-large.typeahead(type="text", name="inputIngredientName", required, ng-model="newIngredient.name")
       .control-group
         label.control-label(for="inputIngredientAmount") Amount
         .controls
-          input.input-medium(type="text", ng-pattern="/(\d*)(\.\d*){0,1}/", id="inputIngredientAmount", ng-model="recipe.newIngredient.amount")
-          input.input-mini(type="text", placeholder="pcs/kg/...", id="inputIngredientAmountUnit", ng-model="recipe.newIngredient.amountUnit")
+          input.input-medium(type="text", id="inputIngredientAmount", ng-model="newIngredient.amount")
+          input.input-mini(type="text", placeholder="pcs/kg/...", id="inputIngredientAmountUnit", ng-model="newIngredient.amountUnit")
     .modal-footer
+      button.btn.btn-primary(ng-click="addIngredient()", data-dismiss="modal") Add
       button.btn(data-dismiss="modal") Cancel
-      button.btn.btn-primary(type="submit") Add
 
 script
   $('.typeahead').typeahead({
@@ -52,7 +59,8 @@ script
       });
     }
     ,property: 'name'
-/*    ,onselect: function(obj){
-      this.$element.closest('form').submit();
-    } */
+    ,onselect: function(obj){
+      //Force the model to reflect this change!
+      angular.element(this.$element).scope().newIngredient.name = obj.name;
+    } 
   });
